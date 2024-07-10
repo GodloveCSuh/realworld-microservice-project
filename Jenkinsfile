@@ -14,6 +14,11 @@ pipeline {
         gradle 'Gradle'
     }
     stages {
+        stage('Checkout To Mcroservice Branch'){
+            steps{
+                git branch: 'app-ad-service', url: 'https://github.com/awanmbandi/realworld-microservice-project.git'
+            }
+        }
         // Checkout To The Service Branch
         stage('Checkout To Mcroservice Branch'){
             steps{
@@ -67,15 +72,15 @@ pipeline {
             }
         }
         // Push Service Image to DockerHub
-        stage('Push Microservice Docker Image') {
-            steps {
-                script {
-                    withDockerRegistry(credentialsId: 'DockerHub-Credential', toolName: 'docker') {
-                        sh "docker push awanmbandi/adservice:latest "
-                    }
-                }
-            }
-        }
+        // stage('Push Microservice Docker Image') {
+        //     steps {
+        //         script {
+        //             withDockerRegistry(credentialsId: 'DockerHub-Credential', toolName: 'docker') {
+        //                 sh "docker push awanmbandi/adservice:latest "
+        //             }
+        //         }
+        //     }
+        // }
         // // Deploy to The Staging/Test Environment
         // stage('Deploy Microservice To The Stage/Test Env'){
         //     steps{
@@ -110,7 +115,7 @@ pipeline {
     post {
     always {
         echo 'Slack Notifications.'
-        slackSend channel: '#ma-multi-microservices-alerts', //update and provide your channel name
+        slackSend channel: '#gcs1-multi-micro-services-alerts', //update and provide your channel name
         color: COLOR_MAP[currentBuild.currentResult],
         message: "*${currentBuild.currentResult}:* Job Name '${env.JOB_NAME}' build ${env.BUILD_NUMBER} \n Build Timestamp: ${env.BUILD_TIMESTAMP} \n Project Workspace: ${env.WORKSPACE} \n More info at: ${env.BUILD_URL}"
     }
