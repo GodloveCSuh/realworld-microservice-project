@@ -13,6 +13,11 @@ pipeline {
         snyk 'Snyk'
     }
     stages {
+        stage('Checkout To Mcroservice Branch'){
+            steps{
+                git branch: 'app-frontend-service', url: 'https://github.com/awanmbandi/realworld-microservice-project.git'
+            }
+        }
         // SonarQube SAST Code Analysis
         stage("SonarQube SAST Analysis"){
             steps{
